@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"> 
+    <head>
+        <meta charset="UTF-8">
+        <title>Calculator</title>
+    </head>
+    <body>
+        <h1>My Calculator</h1>
+        <input type="number" id="number1">
+        <input type="number" id="number2">
+        <input type="button" value="Add" id="addButton">
+        <input type="button" value="Subtract" id="subButton">
+        <input type="button" value="Multiply" id="mulButton">
+        <p id="result"></p>
+        
+        <script>
+            let result = document.getElementById('result');
+
+            let addButton = document.getElementById('addButton');
+            addButton.onclick = function() {
+                let num1 = document.getElementById('number1');
+                let num2 = document.getElementById('number2');
+                let answer = Number(num1.value) + Number(num2.value);
+                result.innerText = answer;
+            };
+
+            let subButton = document.getElementById('subButton');
+            subButton.onclick = function() {
+                let num1 = document.getElementById('number1');
+                let num2 = document.getElementById('number2');
+                let answer = Number(num1.value) - Number(num2.value);
+                result.innerText = answer;
+            };
+
+            let mulButton = document.getElementById('mulButton');
+            mulButton.onclick = function() {
+                let num1 = document.getElementById('number1');
+                let num2 = document.getElementById('number2');
+                let answer = Number(num1.value) * Number(num2.value);
+                result.innerText = answer;
+            };
+        </script>
+    </body>
+</html>

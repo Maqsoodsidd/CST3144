@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
+        <title>Vue.js Pet Store</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    </head>
+    
+    <body>
+        <div id="app">
+            <header>
+                <h1 v-text="sitename"></h1>
+                
+                <button v-on:click="showCheckout">
+                    {{ cartItemCount }}
+                    <span class="fas fa-cart-plus"></span>
+                    Checkout
+                </button>
+            </header>
+
+            <main>
+                <div v-if="showProduct">
+                    <figure>
+                        <img v-bind:src="product.image">
+                    </figure>
+                    <h2 v-text="product.name"></h2>
+                    <p v-text="product.description"></p>
+                    <p>
+                        Price: ${{ product.price }}
+                    </p>
+                    
+                    <button v-on:click="addItem" v-if="canAddtoCart">
+                        Add to Cart
+                    </button>
+
+                    <button disabled="disabled" v-else>
+                        Out of Stock
+                    </button>
+
+                </div>
+                <div v-else>
+                    Checkout Page
+                </div>
+            </main>
+        </div>
+        <script type="text/javascript">
+            var webstore = new Vue({
+                el: '#app',
+                data: {
+                    sitename: 'Vue.js Pet Store',
+                    product: {
+                        id: 1001,
+                        name: 'Cat Food, 25lb Bag',
+                        description: 'A 25 pound bag of <em>irresistible</em>, organic goodness for your cat.',
+                        price: 2000,
+                        image: 'images/product-fullsize.png',
+                        availableInventory: 5
+                    },
+                    showProduct: true,
+                    cart: []
+                },
+                methods: {
+                    addItem: function() {
+                        this.cart.push(this.product.id);
+                    },
+                    showCheckout: function() {
+                        this.showProduct = this.showProduct ? false : true;
+                    }
+                },
+                computed: {
+                    cartItemCount: function() {
+                        return this.cart.length;
+                    },
+                    canAddtoCart: function() {
+                        return this.product.availableInventory > this.cartItemCount;
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+<html lang="en">
+    <head>
+        <title>Getting to know Vue.js</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    </head>
+
+    <body> 
+        <div id="app">
+            <p>Name: {{ name }}</p>
+            <p>{{ program }}</p>
+            <p>{{ hobbies }}</p>
+        </div>
+
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    name: 'Maqsood Siddique',
+                    program: 'CST3144',
+                    hobbies: 'I like Driving'
+                }
+            });
+        </script>
+    </body> 
+</html>
