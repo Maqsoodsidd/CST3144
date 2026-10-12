@@ -11,7 +11,9 @@
             <header>
                 <h1 v-text="sitename"></h1>
                 
-                <button v-on:click="showCheckout">
+                <button v-on:click="showCheckout"
+                v.bind:disabled="cartItemCount === 0"
+                >
                     {{ cartItemCount }}
                     <span class="fas fa-cart-plus"></span>
                     Checkout
@@ -30,7 +32,9 @@
                             Price: ${{ product.price }}
                         </p>
                         
-                        <button v-on:click="addToCart(product)" v-if="canAddToCart(product)">
+                        <button v-on:click="addToCart(product)" 
+                        v-if=disabled="canAddToCart(product)"
+                        >
                             Add to Cart
                         </button>
                         <button disabled="disabled" v-else>
