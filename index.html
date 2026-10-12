@@ -1,7 +1,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
-        <title>Vue.js Pet Store</title>
+        <title>AfterClass: After-School Activities</title>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
         <script src="products.js"></script>
     </head>
@@ -11,53 +11,47 @@
             <header>
                 <h1 v-text="sitename"></h1>
                 
-                <button v-on:click="showCheckout"
-                v.bind:disabled="cartItemCount === 0"
+                <button
+                    v-on:click="showCheckout"
+                    v-bind:disabled="showProduct && cartItemCount === 0"
                 >
-                    {{ cartItemCount }}
                     <span class="fas fa-cart-plus"></span>
-                    Checkout
+                    {{ showProduct ? 'Shopping Cart' : 'Back to Lessons' }}
+                    ({{ cartItemCount }})
                 </button>
             </header>
 
             <main>
                 <div v-if="showProduct">
                     <div v-for="product in sortedProducts" :key="product.id">
-                        <figure>
-                            <img v-bind:src="product.image">
-                        </figure>
+                        <i
+                            class="fa-solid"
+                            v-bind:class="product.icon"
+                            aria-hidden="true"
+                        ></i>
+
                         <h2 v-text="product.title"></h2>
-                        <p v-text="product.description"></p>
+                        
+                        <p>Location: {{ product.location }}</p>
+
+                        <p>Price: AED {{ product.price.toFixed(2) }}</p>
+
                         <p>
-                            Price: ${{ product.price }}
+                            Spaces available:
+                            {{ product.availableInventory - cartCount(product.id) }}
                         </p>
                         
-                        <button v-on:click="addToCart(product)" 
-                        v-if=disabled="canAddToCart(product)"
+                        <button
+                            v-on:click="addToCart(product)"
+                            v-bind:disabled="!canAddToCart(product)"
                         >
                             Add to Cart
                         </button>
-                        <button disabled="disabled" v-else>
-                            Out of Stock
-                        </button>
 
-                        <span v-if="product.availableInventory === cartCount(product.id)">All out!</span>
-                        <span v-else-if="product.availableInventory - cartCount(product.id) < 5">
-                            Only {{product.availableInventory - cartCount(product.id)}} left!
-                        </span>
-                        <span v-else>Buy now!</span>
-
-                        <div>
-                            <span v-for="n in product.rating" :key="'filled-' + n">
-                                <i class="fa-solid fa-star"></i>
-                            </span>
-                            <span v-for="n in (5 - product.rating)" :key="'empty-' + n">
-                                <i class="fa-regular fa-star"></i>
-                            </span>
-                        </div>
-
+                        <p v-if="!canAddToCart(product)">
+                            No spaces available.
+                        </p>
                     </div>
-
                 </div>
                 <div v-else>
                     Checkout Page
@@ -122,7 +116,7 @@
             var webstore = new Vue({
                 el: '#app',
                 data: {
-                    sitename: 'Vue.js Pet Store',
+                    sitename: 'AfterClass: After-School Activities',
                     products: products,
                     showProduct: true,
                     cart: [],
