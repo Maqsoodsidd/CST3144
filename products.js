@@ -6,7 +6,7 @@ let products = [
         location: "MDX Block 15-2-11",
         price: 250,
         availableInventory: 5,
-        icon: "fa-robot"
+        image: "images/Robotics.png"
     },
     {
         id: 1002,
@@ -15,7 +15,7 @@ let products = [
         location: "MDX Block 17-1-04",
         price: 110,
         availableInventory: 5,
-        icon: "fa-book-open"
+        image: "images/Arabic.png"
     },
     {
         id: 1003,
@@ -24,7 +24,7 @@ let products = [
         location: "To Be Announced Via Email",
         price: 370,
         availableInventory: 5,
-        icon: "fa-person-swimming"
+        image: "images/Swimming.png"
     },
     {
         id: 1004,
@@ -33,7 +33,7 @@ let products = [
         location: "MDX Block 15-2-14",
         price: 150,
         availableInventory: 5,
-        icon: "fa-code"
+        image: "images/Coding.png"
     },
     {
         id: 1005,
@@ -42,7 +42,7 @@ let products = [
         location: "MDX Block 16-1-01",
         price: 85,
         availableInventory: 5,
-        icon: "fa-laptop-code"
+        image: "images/Ai-coding.png"
     },
     {
         id: 1006,
@@ -51,7 +51,7 @@ let products = [
         location: "MDX Music Room",
         price: 130,
         availableInventory: 5,
-        icon: "fa-music"
+        image: "images/Music.png"
     },
     {
         id: 1007,
@@ -60,7 +60,7 @@ let products = [
         location: "MDX Library",
         price: 20,
         availableInventory: 5,
-        icon: "fa-compass"
+        image: "images/Career.png"
     },
     {
         id: 1008,
@@ -69,7 +69,7 @@ let products = [
         location: "MDX Block 17-1-01",
         price: 140,
         availableInventory: 5,
-        icon: "fa-cookie-bite"
+        image: "images/Cooking.png"
     },
     {
         id: 1009,
@@ -78,7 +78,7 @@ let products = [
         location: "MDX Block 16-1-04",
         price: 160,
         availableInventory: 5,
-        icon: "fa-palette"
+        image: "images/Pottery.png"
     },
     {
         id: 1010,
@@ -87,6 +87,6 @@ let products = [
         location: "To Be Announced Via Email",
         price: 95,
         availableInventory: 5,
-        icon: "fa-table-tennis-paddle-ball"
+        image: "images/Padel.png"
     }
 ];

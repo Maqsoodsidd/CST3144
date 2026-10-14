@@ -41,11 +41,12 @@
                         </select>
                     </div>
                     <div v-for="product in sortedProducts" :key="product.id" class="lesson-card">
-                        <i
-                            class="fa-solid"
-                            v-bind:class="product.icon"
-                            aria-hidden="true"
-                        ></i>
+                        <img
+                            class="lesson-image"
+                            v-bind:src="product.image"
+                            v-bind:alt="product.title + ' class'"
+                            loading="lazy"
+                        >
 
                         <h2 v-text="product.title"></h2>
                         <p>Location: {{ product.location }}</p>
