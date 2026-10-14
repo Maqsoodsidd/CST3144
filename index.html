@@ -34,7 +34,12 @@
                             <a class="explore-button" href="#classes">Explore classes <span aria-hidden="true">→</span></a>
                         </div>
                         <div class="landing-picture">
-                            <img src="images/Music.png" alt="" width="554" height="554">
+                            <img
+                                src="images/school-supplies.png"
+                                alt="School supplies"
+                                width="1536"
+                                height="512"
+                            >
                             <p>A little curiosity goes a long way.</p>
                         </div>
                     </section>
@@ -44,7 +49,17 @@
                             <h2>Explore our classes</h2>
                             <p>New interests. New skills. Something for everyone.</p>
                         </div>
-                        <span>{{ products.length }} classes to explore</span>
+                        <span aria-live="polite">{{ sortedProducts.length }} classes to explore</span>
+                    </div>
+
+                    <div class="search-bar">
+                        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                        <input
+                            v-model="search"
+                            type="search"
+                            aria-label="Search classes"
+                            placeholder="Search by subject, location, price, spaces or lecturer..."
+                        >
                     </div>
 
                     <div class="class-layout">
@@ -65,6 +80,7 @@
                             </select>
                         </aside>
                         <div class="lesson-grid">
+                            <p v-if="sortedProducts.length === 0" class="no-results">No classes found. Try another search.</p>
                             <div v-for="product in sortedProducts" :key="product.id" class="lesson-card">
                                 <img
                                     class="lesson-image"
@@ -109,7 +125,7 @@
                                 <p>{{ product.location }}</p>
                                 <p>Spaces: {{ cartCount(product.id) }}</p>
                                 <p class="price">AED {{ (product.price * cartCount(product.id)).toFixed(2) }}</p>
-                                <button v-on:click="removeFromCart(product)">Remove one space</button>
+                                <button v-on:click="removeFromCart(product)">Remove one slot</button>
                             </div>
                         </div>
 
@@ -132,22 +148,22 @@
                                     <label for="last-name">Last Name</label>
                                     <input id="last-name" v-model.trim="order.lastName" autocomplete="family-name" required>
                                 </div>
-                                <p class="form-error full-width" v-if="(order.firstName || order.lastName) && !validName">Enter a first and last name using letters only.</p>
+                                <p class="form-error full-width" v-if="(order.firstName || order.lastName) && !validName">Enter a valid first and last name to proceed with checkout.</p>
                                 <div class="full-width">
                                     <label for="phone">Phone Number</label>
                                     <input id="phone" v-model.trim="order.phone" type="tel" inputmode="numeric" autocomplete="tel" required>
-                                    <p class="form-error" v-if="order.phone && !validPhone">Use numbers only, without spaces or a + sign.</p>
+                                    <p class="form-error" v-if="order.phone && !validPhone">Use Numbers only.</p>
                                 </div>
                                 <div class="full-width">
-                                    <label for="address">Address (optional)</label>
+                                    <label for="address">Address</label>
                                     <input id="address" v-model="order.address" autocomplete="street-address">
                                 </div>
                                 <div>
-                                    <label for="city">City (optional)</label>
+                                    <label for="city">City</label>
                                     <input id="city" v-model="order.city" autocomplete="address-level2">
                                 </div>
                                 <div>
-                                    <label for="emirate">Emirate (optional)</label>
+                                    <label for="emirate">Emirate</label>
                                     <select id="emirate" v-model="order.emirate" autocomplete="address-level1">
                                         <option disabled value="">Select Emirate</option>
                                         <option v-bind:value="emirate.DXB">Dubai</option>
@@ -170,7 +186,7 @@
                                 <label for="gift">Send as Gift</label>
                             </div>
                             <fieldset>
-                                <legend>Delivery Method (optional)</legend>
+                                <legend>Delivery Method</legend>
                                 <input type="radio" id="home" value="Home" v-model="order.method">
                                 <label for="home">Home</label>
                                 <input type="radio" id="business" value="Business" v-model="order.method">
@@ -202,6 +218,7 @@
                     products: products,
                     sortBy: 'price',
                     sortOrder: 'ascending',
+                    search: '',
                     showProduct: true,
                     cart: [],
                     order: {
@@ -283,8 +300,19 @@
                     canCheckout: function() {
                         return this.cartItemCount > 0 && this.validName && this.validPhone;
                     },
+                    filteredProducts: function() {
+                        let search = this.search.trim().toLowerCase();
+                        return this.products.filter(product => {
+                            let spaces = product.availableInventory - this.cartCount(product.id);
+                            return product.title.toLowerCase().includes(search) ||
+                                product.location.toLowerCase().includes(search) ||
+                                product.price.toFixed(2).includes(search) ||
+                                String(spaces).includes(search) ||
+                                product.lecturer.toLowerCase().includes(search);
+                        });
+                    },
                     sortedProducts: function() {
-                        let sorted = this.products.slice().sort((a, b) => {
+                        let sorted = this.filteredProducts.slice().sort((a, b) => {
                             let first = a[this.sortBy];
                             let second = b[this.sortBy];
 
