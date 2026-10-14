@@ -1,0 +1,206 @@
+/* Basic page styling */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f7faf8;
+    color: #203028;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+/* Header and cart button */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 24px;
+    background: white;
+    border-bottom: 1px solid #dbe3de;
+}
+
+header h1 {
+    margin: 0;
+    color: #006344;
+    font-size: 26px;
+}
+
+/* Three tiles per row on larger screens */
+main {
+    max-width: 1180px;
+    margin: auto;
+    padding: 32px 24px;
+}
+
+.lesson-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+/* Simple sorting dropdowns above the tiles */
+.sort-controls {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.sort-controls select {
+    padding: 8px 12px;
+    background: white;
+    color: #203028;
+    border: 1px solid #c7d3cb;
+    border-radius: 6px;
+    font: inherit;
+}
+
+.lesson-card {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    background: white;
+    border: 1px solid #dbe3de;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px #20302808;
+}
+
+/* Pastel icon panels */
+.lesson-card > i {
+    display: grid;
+    place-items: center;
+    height: 100px;
+    margin-bottom: 20px;
+    background: #d0f0df;
+    color: #006344;
+    border-radius: 8px;
+    font-size: 36px;
+}
+
+.lesson-card:nth-child(3n + 2) > i {
+    background: #d6effc;
+}
+
+.lesson-card:nth-child(3n + 3) > i {
+    background: #ffe5d3;
+}
+
+.lesson-card h2 {
+    margin: 0 0 12px;
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+.lesson-card p {
+    margin: 6px 0;
+    color: #65716b;
+}
+
+.lesson-card .price {
+    color: #203028;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.lesson-card .spaces {
+    margin-bottom: 20px;
+    color: #006344;
+}
+
+/* Keep buttons aligned at the bottom of the tiles */
+.lesson-card button {
+    width: 100%;
+    margin-top: auto;
+}
+
+.lesson-card .sold-out {
+    color: #9b4436;
+    text-align: center;
+}
+
+/* Buttons */
+button {
+    padding: 10px 16px;
+    background: #006344;
+    color: white;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font: inherit;
+    cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+    background: #004b34;
+}
+
+button:disabled {
+    background: #edf2ef;
+    color: #65716b;
+    border-color: #dbe3de;
+    cursor: not-allowed;
+}
+
+/* Existing checkout form */
+.checkout-panel {
+    max-width: 650px;
+    margin: auto;
+    padding: 28px;
+    background: white;
+    border: 1px solid #dbe3de;
+    border-radius: 12px;
+}
+
+.checkout-panel h2 {
+    margin: 0 0 20px;
+    color: #006344;
+}
+
+.checkout-panel input:not([type="checkbox"]):not([type="radio"]),
+.checkout-panel select {
+    display: block;
+    width: 100%;
+    margin-top: 6px;
+    padding: 10px;
+    border: 1px solid #c7d3cb;
+    border-radius: 6px;
+    font: inherit;
+}
+
+.checkout-panel input[type="checkbox"],
+.checkout-panel input[type="radio"] {
+    accent-color: #006344;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 3px solid #c28937;
+    outline-offset: 3px;
+}
+
+/* Two tiles per row on tablets */
+@media (max-width: 900px) {
+    .lesson-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* One tile per row on phones */
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    main {
+        padding: 24px 16px;
+    }
+
+    .lesson-grid {
+        grid-template-columns: 1fr;
+    }
+}

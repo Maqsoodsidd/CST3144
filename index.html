@@ -1,5 +1,9 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
         <title>AfterClass: After-School Activities</title>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
@@ -10,11 +14,9 @@
         <div id="app">
             <header>
                 <h1 v-text="sitename"></h1>
-                
                 <button
                     v-on:click="showCheckout"
-                    v-bind:disabled="showProduct && cartItemCount === 0"
-                >
+                    v-bind:disabled="showProduct && cartItemCount === 0">
                     <span class="fas fa-cart-plus"></span>
                     {{ showProduct ? 'Shopping Cart' : 'Back to Lessons' }}
                     ({{ cartItemCount }})
@@ -22,8 +24,23 @@
             </header>
 
             <main>
-                <div v-if="showProduct">
-                    <div v-for="product in sortedProducts" :key="product.id">
+                <div v-if="showProduct" class="lesson-grid">
+                    <div class="sort-controls">
+                        <label for="sort-by">Sort by:</label>
+                        <select id="sort-by" v-model="sortBy">
+                            <option value="title">Subject</option>
+                            <option value="location">Location</option>
+                            <option value="price">Price</option>
+                            <option value="availableInventory">Availability</option>
+                        </select>
+
+                        <label for="sort-order">Order:</label>
+                        <select id="sort-order" v-model="sortOrder">
+                            <option value="ascending">Ascending</option>
+                            <option value="descending">Descending</option>
+                        </select>
+                    </div>
+                    <div v-for="product in sortedProducts" :key="product.id" class="lesson-card">
                         <i
                             class="fa-solid"
                             v-bind:class="product.icon"
@@ -31,12 +48,10 @@
                         ></i>
 
                         <h2 v-text="product.title"></h2>
-                        
                         <p>Location: {{ product.location }}</p>
-
-                        <p>Price: AED {{ product.price.toFixed(2) }}</p>
-
-                        <p>
+                        <p>Lecturer: {{ product.lecturer }}</p>
+                        <p class="price">Price: AED {{ product.price.toFixed(2) }}</p>
+                        <p class="spaces">
                             Spaces available:
                             {{ product.availableInventory - cartCount(product.id) }}
                         </p>
@@ -48,13 +63,13 @@
                             Add to Cart
                         </button>
 
-                        <p v-if="!canAddToCart(product)">
+                        <p v-if="!canAddToCart(product)" class="sold-out">
                             No spaces available.
                         </p>
                     </div>
                 </div>
-                <div v-else>
-                    Checkout Page
+                <div v-else class="checkout-panel">
+                    <h2>Checkout Page</h2>
                     <p>
                         <strong>First Name:</strong>
                         <input v-model.trim="order.firstName"/>
@@ -72,13 +87,16 @@
                         <input v-model="order.city"/>
                     </p>
                     <p>
-                        <strong>State:</strong>
-                        <select v-model="order.state" class="form-control">
-                        <option disabled value="">State</option>
-                            <option v-bind:value="states.AL">AL</option>
-                            <option v-bind:value="states.AR">AR</option>
-                            <option v-bind:value="states.CA">CA</option>
-                            <option v-bind:value="states.NV">NV</option>
+                        <strong>Emirate:</strong>
+                        <select v-model="order.emirate" class="form-control">
+                        <option disabled value="">Emirate</option>
+                            <option v-bind:value="emirate.DXB">DXB</option>
+                            <option v-bind:value="emirate.AUH">AUH</option>
+                            <option v-bind:value="emirate.SHJ">SHJ</option>
+                            <option v-bind:value="emirate.AJ">AJ</option>
+                            <option v-bind:value="emirate.RAK">RAK</option>
+                            <option v-bind:value="emirate.FUJ">FUJ</option>
+                            <option v-bind:value="emirate.UAQ">UAQ</option>
                         </select>
                     </p>
                     <p>
@@ -104,7 +122,7 @@
                     <p>Last Name:{{order.lastName}}</p>
                     <p>Address:{{order.address}}</p>
                     <p>City:{{order.city}}</p>
-                    <p>State:{{order.state}}</p>
+                    <p>Emirate:{{order.emirate}}</p>
                     <p>Zip:{{order.zip}}</p>
                     <p>Method:{{order.method}}</p>
 
@@ -118,6 +136,8 @@
                 data: {
                     sitename: 'AfterClass: After-School Activities',
                     products: products,
+                    sortBy: 'price',
+                    sortOrder: 'ascending',
                     showProduct: true,
                     cart: [],
                     order: {
@@ -125,18 +145,21 @@
                         lastName: '',
                         address: '',
                         city: '',
-                        state: '',
+                        emirate: '',
                         zip: '',
                         method: '',
                         gift: 'Do not send as Gift',
                         sendGift: 'Send as Gift',
                         dontSendGift: 'Do not send as Gift' 
                     },
-                    states: {
-                        AL: 'Alabama',
-                        AR: 'Arkansas',
-                        CA: 'California',
-                        NV: 'Nevada'
+                    emirate: {
+                        DXB: 'Dubai',
+                        AUH: 'Abu Dhabi',
+                        SHJ: 'Sharjah',
+                        AJ: 'Ajman',
+                        RAK: 'Ras Al Khaimah',
+                        FUJ: 'Fujairah',
+                        UAQ: 'Umm Al Quwain'
                     }
                 },
                 methods: {
@@ -169,12 +192,22 @@
                         return this.cart.length;
                     },
                     sortedProducts: function() {
-                        function compare(a, b) {
-                            if (a.price < b.price) return -1;
-                            if (a.price > b.price) return 1;
+                        let sorted = this.products.slice().sort((a, b) => {
+                            let first = a[this.sortBy];
+                            let second = b[this.sortBy];
+
+                            if (this.sortBy === 'availableInventory') {
+                                first -= this.cartCount(a.id);
+                                second -= this.cartCount(b.id);
+                            }
+
+                            if (first < second) return -1;
+                            if (first > second) return 1;
                             return 0;
-                        }
-                        return this.products.slice().sort(compare);
+                        });
+
+                        if (this.sortOrder === 'descending') sorted.reverse();
+                        return sorted;
                     }
                 }
             });
