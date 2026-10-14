@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="styles.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
+
         <title>AfterClass: After-School Activities</title>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
         <script src="products.js"></script>
@@ -24,110 +25,172 @@
             </header>
 
             <main>
-                <div v-if="showProduct" class="lesson-grid">
-                    <div class="sort-controls">
-                        <label for="sort-by">Sort by:</label>
-                        <select id="sort-by" v-model="sortBy">
-                            <option value="title">Subject</option>
-                            <option value="location">Location</option>
-                            <option value="price">Price</option>
-                            <option value="availableInventory">Availability</option>
-                        </select>
+                <div v-if="showProduct">
+                    <section class="landing" aria-labelledby="landing-title">
+                        <div class="landing-text">
+                            <p class="eyebrow">Welcome to AfterClass</p>
+                            <h2 id="landing-title">A little more learning.<br>A lot more possibility.</h2>
+                            <p>From your first line of code to your next favourite hobby, find an after-school class that inspires you.</p>
+                            <a class="explore-button" href="#classes">Explore classes <span aria-hidden="true">→</span></a>
+                        </div>
+                        <div class="landing-picture">
+                            <img src="images/Music.png" alt="" width="554" height="554">
+                            <p>A little curiosity goes a long way.</p>
+                        </div>
+                    </section>
 
-                        <label for="sort-order">Order:</label>
-                        <select id="sort-order" v-model="sortOrder">
-                            <option value="ascending">Ascending</option>
-                            <option value="descending">Descending</option>
-                        </select>
+                    <div class="classes-heading" id="classes">
+                        <div>
+                            <h2>Explore our classes</h2>
+                            <p>New interests. New skills. Something for everyone.</p>
+                        </div>
+                        <span>{{ products.length }} classes to explore</span>
                     </div>
-                    <div v-for="product in sortedProducts" :key="product.id" class="lesson-card">
-                        <img
-                            class="lesson-image"
-                            v-bind:src="product.image"
-                            v-bind:alt="product.title + ' class'"
-                            loading="lazy"
-                        >
 
-                        <h2 v-text="product.title"></h2>
-                        <p>Location: {{ product.location }}</p>
-                        <p>Lecturer: {{ product.lecturer }}</p>
-                        <p class="price">Price: AED {{ product.price.toFixed(2) }}</p>
-                        <p class="spaces">
-                            Spaces available:
-                            {{ product.availableInventory - cartCount(product.id) }}
-                        </p>
+                    <div class="class-layout">
+                        <aside class="sort-controls" aria-labelledby="sort-title">
+                            <h3 id="sort-title">Find your class</h3>
+                            <label for="sort-by">Sort by:</label>
+                            <select id="sort-by" v-model="sortBy">
+                                <option value="title">Subject</option>
+                                <option value="location">Location</option>
+                                <option value="price">Price</option>
+                                <option value="availableInventory">Availability</option>
+                            </select>
+
+                            <label for="sort-order">Order:</label>
+                            <select id="sort-order" v-model="sortOrder">
+                                <option value="ascending">Ascending</option>
+                                <option value="descending">Descending</option>
+                            </select>
+                        </aside>
+                        <div class="lesson-grid">
+                            <div v-for="product in sortedProducts" :key="product.id" class="lesson-card">
+                                <img
+                                    class="lesson-image"
+                                    v-bind:src="product.image"
+                                    v-bind:alt="product.title + ' class'"
+                                    loading="lazy"
+                                >
+
+                                <h2 v-text="product.title"></h2>
+                                <p>Location: {{ product.location }}</p>
+                                <p>Lecturer: {{ product.lecturer }}</p>
+                                <p class="price">Price: AED {{ product.price.toFixed(2) }}</p>
+                                <p class="spaces">
+                                    Spaces available:
+                                    {{ product.availableInventory - cartCount(product.id) }}
+                                </p>
                         
-                        <button
-                            v-on:click="addToCart(product)"
-                            v-bind:disabled="!canAddToCart(product)"
-                        >
-                            Add to Cart
-                        </button>
+                                <button
+                                    v-on:click="addToCart(product)"
+                                    v-bind:disabled="!canAddToCart(product)"
+                                >
+                                    Add to Cart
+                                </button>
 
-                        <p v-if="!canAddToCart(product)" class="sold-out">
-                            No spaces available.
-                        </p>
+                                <p v-if="!canAddToCart(product)" class="sold-out">
+                                    No spaces available.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div v-else class="checkout-panel">
-                    <h2>Checkout Page</h2>
-                    <p>
-                        <strong>First Name:</strong>
-                        <input v-model.trim="order.firstName"/>
-                    </p>
-                    <p>
-                        <strong>Last Name:</strong>
-                        <input v-model="order.lastName"/>
-                    </p>
-                    <p>
-                        <strong>Address:</strong>
-                        <input v-model="order.address"/>
-                    </p>
-                    <p>
-                        <strong>City:</strong>
-                        <input v-model="order.city"/>
-                    </p>
-                    <p>
-                        <strong>Emirate:</strong>
-                        <select v-model="order.emirate" class="form-control">
-                        <option disabled value="">Emirate</option>
-                            <option v-bind:value="emirate.DXB">DXB</option>
-                            <option v-bind:value="emirate.AUH">AUH</option>
-                            <option v-bind:value="emirate.SHJ">SHJ</option>
-                            <option v-bind:value="emirate.AJ">AJ</option>
-                            <option v-bind:value="emirate.RAK">RAK</option>
-                            <option v-bind:value="emirate.FUJ">FUJ</option>
-                            <option v-bind:value="emirate.UAQ">UAQ</option>
-                        </select>
-                    </p>
-                    <p>
-                        <strong>Zip:</strong>
-                        <input v-model.number="order.zip" type="number"/>
-                    </p>
-                    <p>
-                        <input type="checkbox" id="gift"
-                        v-model="order.gift"
-                        v-bind:true-value="order.sendGift"
-                        v-bind:false-value="order.dontSendGift"/>
-                        <label for="gift">Send as Gift</label>
-                    </p>
+                <div v-else class="checkout-layout">
+                    <section class="cart-panel">
+                        <h2>Your Cart</h2>
+                        <p class="panel-intro">{{ cartItemCount }} spaces selected</p>
+                        <p v-if="cartItemCount === 0" class="empty-cart">Your cart is empty. Go back to lessons to choose a class.</p>
 
-                        <input type="radio" id="home" value="Home" v-model="order.method">
-                        <label for="home">Home </label>
+                        <div v-for="product in cartProducts" :key="product.id" class="cart-item">
+                            <img v-bind:src="product.image" v-bind:alt="product.title + ' class'">
+                            <div class="cart-details">
+                                <h3>{{ product.title }}</h3>
+                                <p>{{ product.location }}</p>
+                                <p>Spaces: {{ cartCount(product.id) }}</p>
+                                <p class="price">AED {{ (product.price * cartCount(product.id)).toFixed(2) }}</p>
+                                <button v-on:click="removeFromCart(product)">Remove one space</button>
+                            </div>
+                        </div>
 
-                        <input type="radio" id="business" value="Business" v-model="order.method">
-                        <label for="business">Business </label>
+                        <div class="cart-total">
+                            <strong>Total</strong>
+                            <strong>AED {{ cartTotal.toFixed(2) }}</strong>
+                        </div>
+                    </section>
 
-                    <h2>Order Information</h2>
-                    <p>First Name:{{order.firstName}}</p>
-                    <p>Last Name:{{order.lastName}}</p>
-                    <p>Address:{{order.address}}</p>
-                    <p>City:{{order.city}}</p>
-                    <p>Emirate:{{order.emirate}}</p>
-                    <p>Zip:{{order.zip}}</p>
-                    <p>Method:{{order.method}}</p>
+                    <section class="checkout-panel">
+                        <h2>Checkout</h2>
+                        <p class="panel-intro">Enter your name and phone number to place your order.</p>
+                        <form v-on:submit.prevent="submitForm">
+                            <div class="checkout-fields">
+                                <div>
+                                    <label for="first-name">First Name</label>
+                                    <input id="first-name" v-model.trim="order.firstName" autocomplete="given-name" required>
+                                </div>
+                                <div>
+                                    <label for="last-name">Last Name</label>
+                                    <input id="last-name" v-model.trim="order.lastName" autocomplete="family-name" required>
+                                </div>
+                                <p class="form-error full-width" v-if="(order.firstName || order.lastName) && !validName">Enter a first and last name using letters only.</p>
+                                <div class="full-width">
+                                    <label for="phone">Phone Number</label>
+                                    <input id="phone" v-model.trim="order.phone" type="tel" inputmode="numeric" autocomplete="tel" required>
+                                    <p class="form-error" v-if="order.phone && !validPhone">Use numbers only, without spaces or a + sign.</p>
+                                </div>
+                                <div class="full-width">
+                                    <label for="address">Address (optional)</label>
+                                    <input id="address" v-model="order.address" autocomplete="street-address">
+                                </div>
+                                <div>
+                                    <label for="city">City (optional)</label>
+                                    <input id="city" v-model="order.city" autocomplete="address-level2">
+                                </div>
+                                <div>
+                                    <label for="emirate">Emirate (optional)</label>
+                                    <select id="emirate" v-model="order.emirate" autocomplete="address-level1">
+                                        <option disabled value="">Select Emirate</option>
+                                        <option v-bind:value="emirate.DXB">Dubai</option>
+                                        <option v-bind:value="emirate.AUH">Abu Dhabi</option>
+                                        <option v-bind:value="emirate.SHJ">Sharjah</option>
+                                        <option v-bind:value="emirate.AJ">Ajman</option>
+                                        <option v-bind:value="emirate.RAK">Ras Al Khaimah</option>
+                                        <option v-bind:value="emirate.FUJ">Fujairah</option>
+                                        <option v-bind:value="emirate.UAQ">Umm Al Quwain</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="zip">Zip (optional)</label>
+                                    <input id="zip" v-model.number="order.zip" type="number" autocomplete="postal-code">
+                                </div>
+                            </div>
 
-                    <button v-on:click="submitForm">Place Order</button>
+                            <div class="checkout-options">
+                                <input type="checkbox" id="gift" v-model="order.gift" v-bind:true-value="order.sendGift" v-bind:false-value="order.dontSendGift">
+                                <label for="gift">Send as Gift</label>
+                            </div>
+                            <fieldset>
+                                <legend>Delivery Method (optional)</legend>
+                                <input type="radio" id="home" value="Home" v-model="order.method">
+                                <label for="home">Home</label>
+                                <input type="radio" id="business" value="Business" v-model="order.method">
+                                <label for="business">Business</label>
+                            </fieldset>
+
+                            <div class="order-summary">
+                                <h3>Order Information</h3>
+                                <p>Name: {{ order.firstName }} {{ order.lastName }}</p>
+                                <p>Phone: {{ order.phone }}</p>
+                                <p>Address: {{ order.address }}</p>
+                                <p>City: {{ order.city }}</p>
+                                <p>Emirate: {{ order.emirate }}</p>
+                                <p>Zip: {{ order.zip }}</p>
+                                <p>Method: {{ order.method }}</p>
+                            </div>
+                            <p class="checkout-help" v-if="!canCheckout">Add a lesson and enter a valid name and phone number to continue.</p>
+                            <button class="place-order" type="submit" v-bind:disabled="!canCheckout">Place Order</button>
+                        </form>
+                    </section>
                 </div>
             </main>
         </div>
@@ -144,6 +207,7 @@
                     order: {
                         firstName: '',
                         lastName: '',
+                        phone: '',
                         address: '',
                         city: '',
                         emirate: '',
@@ -169,6 +233,12 @@
                             this.cart.push(product.id);
                         }
                     },
+                    removeFromCart: function(product) {
+                        let index = this.cart.indexOf(product.id);
+                        if (index !== -1) {
+                            this.cart.splice(index, 1);
+                        }
+                    },
                     canAddToCart: function(product) {
                         return product.availableInventory > this.cartCount(product.id);
                     },
@@ -185,12 +255,33 @@
                         this.showProduct = this.showProduct ? false : true;
                     },
                     submitForm: function() {
-                        alert('Order Submitted!');
+                        if (this.canCheckout) {
+                            alert('Order Submitted!');
+                        }
                     }
                 },
                 computed: {
                     cartItemCount: function() {
                         return this.cart.length;
+                    },
+                    cartProducts: function() {
+                        return this.products.filter(product => this.cart.includes(product.id));
+                    },
+                    cartTotal: function() {
+                        let total = 0;
+                        for (let product of this.cartProducts) {
+                            total += product.price * this.cartCount(product.id);
+                        }
+                        return total;
+                    },
+                    validName: function() {
+                        return /^[A-Za-z]+$/.test(this.order.firstName) && /^[A-Za-z]+$/.test(this.order.lastName);
+                    },
+                    validPhone: function() {
+                        return /^[0-9]+$/.test(this.order.phone);
+                    },
+                    canCheckout: function() {
+                        return this.cartItemCount > 0 && this.validName && this.validPhone;
                     },
                     sortedProducts: function() {
                         let sorted = this.products.slice().sort((a, b) => {
