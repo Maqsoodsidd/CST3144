@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <script src="https:></script>
+    <script>
+        let store = new Vue({
+            data: {
+                product: [],
+            },
+            created: function() {
+                console.log("requesting data from server...")
+
+                fetch("http://localhost:3000")
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(json) {
+                        this.product = json;
+                        console.log(json);
+                    }.bind(this));
+            }
+            
+        });
+    </script>
+</body>
+</html>
