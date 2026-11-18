@@ -1,8 +1,10 @@
-const mustache = require ("mustache");
-function createGreeting(first,last) {
+const mustache = require('mustache');
+
+function createGreeting(first, last) {
   return mustache.render(
-    'Hi, {{first}} {{last}}! Welcome to the server.'
-    {first,last}
+    'Hi, {{first}} {{last}}! Welcome to the server.',
+    { first, last }
   );
 }
-module.exports = {createGreeting};
+
+module.exports = { createGreeting };
