@@ -1,0 +1,15 @@
+{
+  "name": "week8.1",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "maqsood",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "mustache": "^4.2.0"
+  }
+}
